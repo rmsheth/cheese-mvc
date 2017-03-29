@@ -1,8 +1,6 @@
 package org.launchcode;
 
-import org.launchcode.models.Cheese;
-import org.launchcode.models.CheeseData;
-import org.launchcode.models.CheeseType;
+import org.launchcode.models.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,5 +23,8 @@ public class CheeseMvcApplication implements CommandLineRunner{
 		cheese.setType(CheeseType.HARD);
 		cheese.setRating(3);
 		CheeseData.add(cheese);
+
+		User user = new User("LaunchCode", "hunter2", "user@launchcode.org");
+		UserData.add(user);
 	}
 }
