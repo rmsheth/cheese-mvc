@@ -1,5 +1,7 @@
 package org.launchcode.models;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -16,8 +18,14 @@ public class Cheese {
     @Size(min=1, message = "Description must not be empty")
     private String description;
 
-    private CheeseType type;
+    /**
+     * Min and Max provide validation for low and high limits to our rating
+     */
+    @Max(5)
+    @Min(1)
+    private int rating;
 
+    private CheeseType type;
     private int cheeseId;
     private static int nextId = 1;
 
@@ -62,5 +70,15 @@ public class Cheese {
 
     public void setType(CheeseType type) {
         this.type = type;
+    }
+
+    // Don't forget your getters and setters!
+    // Otherwise, Spring won't know how to populate our object
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 }

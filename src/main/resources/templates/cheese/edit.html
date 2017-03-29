@@ -6,15 +6,16 @@
 
 <nav th:replace="fragments :: navigation"></nav>
 
+<!-- Our edit form is almost identical to our Add form, except the differences noted below -->
 <form method="post" style="max-width:600px;" th:object="${cheese}">
     <div class="form-group">
         <label th:for="name">Name</label>
-        <input class="form-control" th:field="*{name}" />
+        <input class="form-control" th:field="*{name}"/>
         <span th:errors="*{name}" class="error"></span>
     </div>
     <div class="form-group">
         <label th:for="description">Description</label>
-        <input class="form-control" th:field="*{description}" />
+        <input class="form-control" th:field="*{description}"/>
         <span th:errors="*{description}" class="error"></span>
     </div>
 
@@ -27,17 +28,17 @@
         </select>
     </div>
 
-    <!--Adds a field for our "rating" property we added to our model. -->
-    <!--Make sure your `th:for` `th:field` and `th:errors` all reference the same property of our model.-->
-    <!--The `th:for` does not require the `*{}`, because it is associating the label with the property `rating`,-->
-    <!--not the value of the rating itself, which is why you need `*{}` for `th:field` -->
     <div class="form-group">
         <label th:for="rating">Rating</label>
         <input class="form-control" type="number" th:field="*{rating}"/>
         <span th:errors="*{rating}" class="error"></span>
     </div>
 
-    <input type="submit" value="Add Cheese" />
+    <!-- We add a hidden field for our cheeseId (Using `*{cheeseId}` to reference our model defined above as `th:object="${cheese}"`-->
+    <input type="hidden" th:field="*{cheeseId}"/>
+
+    <!-- Make sure your form still makes sense, rename your button to the edit-->
+    <input type="submit" value="Edit Cheese"/>
 </form>
 
 </body>
