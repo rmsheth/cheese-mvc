@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.Email;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.InvalidObjectException;
 
 /**
  * Created by LaunchCode
@@ -70,4 +71,23 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public void validateChecked(String validate) throws InvalidObjectException {
+        if(!validate.equals(this.password)){
+            throw new InvalidObjectException("Password does not match verification.");
+        }
+    }
+
+    public void validateUnchecked(String validate) {
+        if(!validate.equals(this.password)){
+            throw new IllegalArgumentException("Password does not match verification.");
+        }
+    }
+
+    public void validateCustomException(String validate) {
+        if(!validate.equals(this.password)){
+            throw new InvalidUserException("Password does not match verification.");
+        }
+    }
+
 }

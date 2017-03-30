@@ -1,5 +1,6 @@
 package org.launchcode.controllers;
 
+import org.launchcode.models.InvalidUserException;
 import org.launchcode.models.User;
 import org.launchcode.models.UserData;
 import org.springframework.stereotype.Controller;
@@ -7,7 +8,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.InvalidObjectException;
+import java.time.LocalDateTime;
 
 /**
  * This resembles our `CheeseController` very closely, see that class for additional comments.
@@ -34,13 +38,23 @@ public class UserController {
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public String processAddUserForm(@RequestParam String verify, @ModelAttribute @Valid User newUser, Errors errors, Model model) {
 
+//        try {
+//            newUser.validateChecked(verify);
+//        } catch (InvalidObjectException e) {
+//            model.addAttribute("verifyError", "Password did not match verification.");
+//            return "user/add";
+//        }
+
+        //newUser.validateUnchecked(verify);
+        //newUser.validateCustomException(verify);
+
         // Here, we see checking for validation errors, as well as checking the verification password together
         // This is done to reduce code repeat, and ensure that we can return both validation errors,
         // as well as our password verification error together
         if (errors.hasErrors() || !newUser.getPassword().equals(verify)) {
             model.addAttribute("title", "Add User");
             if (!newUser.getPassword().equals(verify)) {
-                model.addAttribute("verifyError", "Password did not match verification.");
+                model.addAttribute("verifyError", "Password does not match verification.");
             }
             return "user/add";
         }
@@ -68,6 +82,16 @@ public class UserController {
         UserData.add(editedUser);
 
         return "redirect:..";
+    }
+
+    // Total control - setup a model and return the view name yourself. Or
+    // consider subclassing ExceptionHandlerExceptionResolver (see below).
+    @ExceptionHandler(InvalidUserException.class)
+    public String handleError(HttpServletRequest req, Exception ex, Model model) {
+        model.addAttribute("exception", ex.getMessage());
+        model.addAttribute("url", req.getRequestURL());
+        model.addAttribute("timestamp", LocalDateTime.now().toString());
+        return "error";
     }
 
 }
